@@ -87,6 +87,7 @@ getRecipe();
 
 // Three functions with promises
 // if promise sucessfull: use resolve else use reject, basycally try and catch from Java
+/*
 const getIDs = new Promise((resolve, reject) => {
 
     // this timer is for sure to end(sucess), so it woldn't be necessary to call reject here
@@ -144,3 +145,131 @@ getIDs
     })
     .then( result => console.log(result) )
     .catch( error => console.log(error) );
+*/
+
+/////////////////////////////////////////////////////////////
+// Async/Await
+/*
+const getIDs = new Promise((resolve, reject) => {
+
+    // this timer is for sure to end(sucess), so it woldn't be necessary to call reject here
+    setTimeout(() => {
+        resolve([523, 883, 432, 974]); //sucess return
+        reject('Fatal Error!'); //fail return
+    }, 1500);
+
+})
+
+const getRecipe = recId => {
+    return new Promise((resolve, reject) =>{
+
+        setTimeout( (ID) => {
+            const recipe = {
+                title: 'Fresh tomato pasta',
+                publisher: 'Victor'
+            }
+
+            resolve(`${ID}: ${recipe.title}`);
+        }, 1500, recId);
+            
+    })
+}
+
+const getRelated = publisher => {
+    return new Promise( (resolve, reject) =>{
+        
+        setTimeout( pub => {
+            const recipe = {
+                title: 'Italian Pizza',
+                publisher: pub
+            }
+
+            resolve(`${pub}: ${recipe.title}`);
+        }, 2000, publisher);
+
+    });
+}
+
+// ES7 feature, an asynchronous function which returns a promise
+async function getRecipeAW(){
+    //after fullfilment of the promise, IDs gets resolve
+    const IDs = await getIDs; 
+    console.log(IDs);
+
+    const recipe = await getRecipe(IDs[3]);
+    console.log(recipe);
+
+    const pub = await getRelated('Victor');
+    console.log(pub);
+
+    return recipe; // async function always retuns yet... ANOTHER promise
+}
+
+// then we consume the result
+getRecipeAW().then(result => console.log(`da best ${result}!!!`));
+*/
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// AJAX and APIs
+// AJAX => Asynchronous Javascript And XML, allows request and response from a remote server
+// API => Application Programing Interface, I can my own API receives data from my server or a 3rd-party API like Google Maps
+
+////////////////////////////////////////////////////////////////////
+// Making AJAX calls with Fetch and Promises
+/*
+// use crossorigin request to test: https://cors-anywhere.herokuapp.com/ 
+// https://www.metaweather.com/api/location/(woeid)/  => where on earth id
+// fetch gets data from the API
+function getWeather(woeid) {
+
+    fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`)
+        .then(result => {
+            //console.log(result); //json data received from the server;
+            return result.json(); //converts to javascript object data;
+        })
+        .then(data => {
+            //console.log(data);
+            const today = data.consolidated_weather[0];
+
+            console.log(`Today\'s temperature in ${data.title} stays \nbetween ${today.min_temp} and ${today.max_temp}.`);
+        })
+        .catch(error => console.log(error));
+
+}
+
+getWeather(44418); // London
+getWeather(2487956); // San Francisco
+//getWeather(2487344355456223344326); // Error simulation
+*/
+
+//////////////////////////////////////////////////////////////////////
+// Making AJAX calls with Fetch and Async/await *Very Cool!!
+async function getWeatherAW(woeid) {
+
+    try {
+
+        const jsonData = await fetch(`https://cors-anywhere.herokuapp.com/https://www.metaweather.com/api/location/${woeid}/`);
+        const jsObject = await jsonData.json();
+
+        const today = jsObject.consolidated_weather[0];
+
+        console.log(`Today\'s temperature in ${jsObject.title} stays \nbetween ${today.min_temp} and ${today.max_temp}.`);
+
+        return jsObject; // optional
+
+    } catch (error) {
+
+        alert(error);
+        console.log('An Fatal Error Ocurred! :O');
+    
+    }
+
+}
+
+// London
+getWeatherAW(44418)
+    .then(result => console.log(result)); // handles the result of try from the promise method
+// San Francisco
+getWeatherAW(2487956)
+    .then(result => console.log(result));
+//getWeatherAW(2487344355456223344326); // Error simulation
