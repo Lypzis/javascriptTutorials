@@ -53,7 +53,7 @@ export default class Recipe {
             })
 
             // 2) Remove text between parentheses and the parenthesis
-            ingredient = ingredient.replace(/ *\([^)]*\) */g, ''); // regex.
+            ingredient = ingredient.replace(/ *\([^)]*\) */g, ' '); // regex.
 
             // 3) Parse ingredients into count, unit and ingredient
             const arrIng = ingredient.split(' ');

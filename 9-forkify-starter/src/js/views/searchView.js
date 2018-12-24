@@ -11,6 +11,16 @@ export const clearResults = () => {
     elements.searchResPages.innerHTML = '';
 }
 
+export const highlightSelected = id => {
+   const resultsArr = Array.from(document.querySelectorAll('.results__link'));
+
+    resultsArr.forEach(e => {
+        e.classList.remove('results__link--active');
+    }); 
+
+    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+}
+
 // limit defaults to 17 the size of titles of recipes being shown
 const limitRecipeTitle = (recipe, limit = 17) => {
     const newTitle = [];
