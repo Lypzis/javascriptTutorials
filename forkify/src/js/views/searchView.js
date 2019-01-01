@@ -18,11 +18,11 @@ export const highlightSelected = id => {
         e.classList.remove('results__link--active');
     }); 
 
-    document.querySelector(`a[href="#${id}"]`).classList.add('results__link--active');
+    document.querySelector(`.results__link[href="#${id}"]`).classList.add('results__link--active');
 }
 
 // limit defaults to 17 the size of titles of recipes being shown
-const limitRecipeTitle = (recipe, limit = 17) => {
+export const limitRecipeTitle = (recipe, limit = 17) => {
     const newTitle = [];
     if (recipe.length > limit) {
         //'Pasta with Tomato' turns into an array with 3 elements
