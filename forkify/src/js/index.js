@@ -118,10 +118,6 @@ const controlList = () => {
 /** 
  * Likes controller
  */
-// TESTING, later on, this will be saved into the local storage of the browser.
-state.likes = new Likes();
-likesView.toggleLikeMenu(state.likes.getNumLikes());
-
 const controlLike = () => {
     if(!state.likes) state.likes = new Likes();
 
@@ -157,6 +153,20 @@ const controlLike = () => {
 
     likesView.toggleLikeMenu(state.likes.getNumLikes());
 }
+
+// Restore like recipes on page load
+window.addEventListener('load', () => {
+    state.likes = new Likes();
+
+    // Restore likes
+    state.likes.readStorage(); 
+
+    // Toggle like menu button
+    likesView.toggleLikeMenu(state.likes.getNumLikes());
+
+    // Render the existing likes 
+    state.likes.likes.forEach(like => likesView.renderLike(like));
+});
 
 // Handles delete and update list item events
 elements.shopping.addEventListener('click', e => {
@@ -217,16 +227,6 @@ elements.searchForm.addEventListener('submit', event => {
 
     controlSearch();
 });
-
-// TESTING
-/*
-window.addEventListener('load', event => {
-    event.preventDefault();
-
-    controlSearch();
-});
-*/
-
 
 // event delegation
 elements.searchResPages.addEventListener('click', e => {
