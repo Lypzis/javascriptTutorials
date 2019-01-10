@@ -238,16 +238,3 @@ elements.searchResPages.addEventListener('click', e => {
         searchView.rederResults(state.search.result, goToPage);
     };
 });
-
-// testing the async function
-/*search.getResults()
-    .then( recipes => console.log(recipes[0]))
-    .catch( error => console.log(error));
-*/
-
-
-// key = 8092d77f911d7f024b2081f0d87a294b
-// API URL for search requests
-// http://food2fork.com/api/search 
-// and this for recipe requests: 
-// http://food2fork.com/api/get 

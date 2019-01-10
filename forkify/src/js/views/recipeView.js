@@ -4,21 +4,26 @@ import { Fraction } from 'fractional';
 const formatCount = count => {
     if(count) {
         
-        const [int, dec] = count.toString().split('.').map(e => parseInt(e, 10));
+        // rounded number, since it returns an integer and we want 
+        // a fraction with four numbers(eg: 1.3333), 
+        // just multiply the value to 10000 and divide it by 10000;
+        const newCount = Math.round(count * 10000)/10000;
+
+        const [int, dec] = newCount.toString().split('.').map(e => parseInt(e, 10));
 
         // return number as it is, without modification
-        if (!dec) return count;
+        if (!dec) return newCount;
 
-        // count = 0.5 ----->  1/2
+        // newCount = 0.5 ----->  1/2
         if(int === 0) {
-            const fr = new Fraction(count);
+            const fr = new Fraction(newCount);
 
             return `${fr.numerator}/${fr.denominator}`;
         } 
 
-        // count = 2.5 ---> 5/2 ---> 2 1/2
+        // newCount = 2.5 ---> 5/2 ---> 2 1/2
         else {
-            const fr = new Fraction(count - int); // such as 2.5 - 2 = 0.5;
+            const fr = new Fraction(newCount - int); // such as 2.5 - 2 = 0.5;
 
             return `${int} ${fr.numerator}/${fr.denominator}`; // then place the integer back in front;
         }
